@@ -9,6 +9,7 @@ class SalesInvoice extends Model
 {
     /**
      * The attributes that are mass assignable.
+     * @todo create class for customers and change 'customerName' to 'customerId'
      *
      * @var array<int, string>
      */
