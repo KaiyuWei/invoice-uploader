@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('sales_invoices', function (Blueprint $table) {
             $table->id();
+            $table->string('customer_name');
+            $table->date('invoice_date');
+            $table->decimal('total_amount', 10, 2);
             $table->timestamps();
         });
     }
