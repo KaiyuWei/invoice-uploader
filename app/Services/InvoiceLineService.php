@@ -2,19 +2,12 @@
 
 namespace App\Services;
 
+use App\Services\Contracts\InvoiceLineServiceInterface;
 use App\Models\SalesInvoice;
 use App\Models\InvoiceLine;
-use Illuminate\Support\Facades\Log;
 
-class InvoiceLineService
+class InvoiceLineService implements InvoiceLineServiceInterface
 {
-    /**
-     * Create invoice line items for a invoice
-     *
-     * @param SalesInvoice $invoice
-     * @param array $invoiceLinesData
-     * @return void
-     */
     public function createInvoiceLines(SalesInvoice $invoice, array $invoiceLinesData): void
     {
         foreach ($invoiceLinesData as $lineData) {
@@ -22,15 +15,12 @@ class InvoiceLineService
         }
     }
 
-    /**
-     * Create a single invoice line item
-     *
-     * @param SalesInvoice $invoice
-     * @param array $lineData
-     * @return InvoiceLine
-     */
     public function createInvoiceLine(SalesInvoice $invoice, array $lineData): InvoiceLine
     {
+        $lineData['quantity'] = round($lineData['quantity'], 2);
+        $lineData['unit_price'] = round($lineData['unitPrice'], 2);
+        $lineData['amount'] = round($lineData['amount'], 2);
+
         $invoiceLine = $invoice->invoiceLines()->create([
             'description' => $lineData['description'],
             'quantity' => $lineData['quantity'],

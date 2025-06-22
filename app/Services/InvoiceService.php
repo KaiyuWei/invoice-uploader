@@ -2,15 +2,17 @@
 
 namespace App\Services;
 
+use App\Factories\Contracts\SalesInvoiceFactoryInterface;
+use App\Services\Contracts\InvoiceLineServiceInterface;
 use App\Models\SalesInvoice;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Services\InvoiceLineService;
 
 class InvoiceService
 {
     public function __construct(
-        private InvoiceLineService $invoiceLineService
+        private InvoiceLineServiceInterface $invoiceLineService,
+        private SalesInvoiceFactoryInterface $salesInvoiceFactory
     ) {
     }
 
@@ -24,7 +26,7 @@ class InvoiceService
     public function createInvoice(array $validatedData): SalesInvoice
     {
         return DB::transaction(function () use ($validatedData) {
-            $invoice = SalesInvoice::create([
+            $invoice = $this->salesInvoiceFactory->create([
                 'customer_name' => $validatedData['customerName'],
                 'invoice_date' => $validatedData['invoiceDate'],
                 'total_amount' => $validatedData['totalAmount'],
