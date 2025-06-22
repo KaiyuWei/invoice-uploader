@@ -1,5 +1,7 @@
 # Makefile
 
+PHP_CS_FIXER = vendor/bin/php-cs-fixer
+
 up:
 	docker compose up -d
 
@@ -20,3 +22,6 @@ ps:
 
 gen-swagger:
 	./vendor/bin/openapi app/ -o ./docs/openapi.yaml
+
+fix:
+	$(PHP_CS_FIXER) fix $(file)

@@ -8,13 +8,13 @@ servers:
     url: 'http://localhost:8000/api'
     description: 'API Server'
 paths:
-  /api/sales-invoices:
+  /sales-invoices:
     post:
       tags:
         - Invoices
       summary: 'Upload a new sales invoice'
       description: 'Creates a new sales invoice with customer details and line items'
-      operationId: a2cd58b97fe837161c50332d36e158b4
+      operationId: df3843551885fadc31c63ab14a01c8d6
       requestBody:
         required: true
         content:

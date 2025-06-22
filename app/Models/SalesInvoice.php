@@ -14,9 +14,9 @@ class SalesInvoice extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'customerName',
-        'invoiceDate',
-        'totalAmount',
+        'customer_name',
+        'invoice_date',
+        'total_amount',
     ];
 
     /**
@@ -25,8 +25,8 @@ class SalesInvoice extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'invoiceDate' => 'date',
-        'totalAmount' => 'decimal:2',
+        'invoice_date' => 'date',
+        'total_amount' => 'decimal:2',
     ];
 
     /**

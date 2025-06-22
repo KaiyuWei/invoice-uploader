@@ -4,16 +4,22 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadInvoiceRequest;
-use App\Models\SalesInvoice;
+use App\Services\InvoiceService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class SalesInvoiceController extends Controller
 {
+    public function __construct(
+        private InvoiceService $invoiceService
+    ) {
+    }
+
     /**
      * Upload a new sales invoice with line items
-     * 
+     *
      * @OA\Post(
-     *     path="/api/sales-invoices",
+     *     path="/sales-invoices",
      *     summary="Upload a new sales invoice",
      *     description="Creates a new sales invoice with customer details and line items",
      *     tags={"Invoices"},
@@ -143,37 +149,19 @@ class SalesInvoiceController extends Controller
      */
     public function uploadInvoice(UploadInvoiceRequest $request): JsonResponse
     {
-        return response()->json(['message' => 'Invoice uploaded successfully']);
-    //     try {
-    //         $validated = $request->validated();
-            
-    //         // Create the sales invoice
-    //         $invoice = SalesInvoice::create([
-    //             'customerName' => $validated['customerName'],
-    //             'invoiceDate' => $validated['invoiceDate'],
-    //             'totalAmount' => $validated['totalAmount'],
-    //         ]);
-            
-    //         // Create invoice lines
-    //         foreach ($validated['invoiceLines'] as $lineData) {
-    //             $invoice->invoiceLines()->create([
-    //                 'description' => $lineData['description'],
-    //                 'quantity' => $lineData['quantity'],
-    //                 'unitPrice' => $lineData['unitPrice'],
-    //                 'amount' => $lineData['amount'],
-    //             ]);
-    //         }
-            
-    //         return response()->json([
-    //             'message' => 'Invoice uploaded successfully',
-    //             'invoice' => $invoice->load('invoiceLines')
-    //         ], 201);
-            
-    //     } catch (\Exception $e) {
-    //         return response()->json([
-    //             'message' => 'Failed to upload invoice',
-    //             'error' => $e->getMessage()
-    //         ], 500);
-    //     }
+        try {
+            $validated = $request->validated();
+
+            $this->invoiceService->createInvoice($validated);
+
+            return response()->json([
+                'message' => 'Invoice uploaded successfully',
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to upload invoice',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

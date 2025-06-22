@@ -13,10 +13,10 @@ class InvoiceLine extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'salesInvoiceId',
+        'sales_invoice_id',
         'description',
         'quantity',
-        'unitPrice',
+        'unit_price',
         'amount',
     ];
 
