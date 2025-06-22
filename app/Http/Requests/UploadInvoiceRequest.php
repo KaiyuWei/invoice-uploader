@@ -25,12 +25,12 @@ class UploadInvoiceRequest extends FormRequest
         return [
             'customerName' => 'required|string|max:255',
             'invoiceDate' => 'required|date',
-            'totalAmount' => 'required|numeric|min:0|decimal:0,2',
+            'totalAmount' => 'required|numeric|min:0|decimal:0,5',
             'invoiceLines' => 'required|array|min:1',
             'invoiceLines.*.description' => 'required|string|max:1000',
-            'invoiceLines.*.quantity' => 'required|numeric|min:0|decimal:0,2',
-            'invoiceLines.*.unitPrice' => 'required|numeric|min:0|decimal:0,2',
-            'invoiceLines.*.amount' => 'required|numeric|min:0|decimal:0,2',
+            'invoiceLines.*.quantity' => 'required|numeric|min:0|decimal:0,5',
+            'invoiceLines.*.unitPrice' => 'required|numeric|min:0|decimal:0,5',
+            'invoiceLines.*.amount' => 'required|numeric|min:0|decimal:0,5',
         ];
     }
 
@@ -49,7 +49,6 @@ class UploadInvoiceRequest extends FormRequest
             'totalAmount.required' => 'Total amount is required.',
             'totalAmount.numeric' => 'Total amount must be a number.',
             'totalAmount.min' => 'Total amount cannot be negative.',
-            'totalAmount.decimal' => 'Total amount can have up to 2 decimal places.',
             'invoiceLines.required' => 'At least one invoice line is required.',
             'invoiceLines.array' => 'Invoice lines must be an array.',
             'invoiceLines.min' => 'At least one invoice line is required.',
