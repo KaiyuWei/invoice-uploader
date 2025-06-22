@@ -58,7 +58,7 @@ services:
     environment:
       SWAGGER_JSON: /docs/openapi.yaml
     volumes:
-      - ./docs/openapi.yaml:/docs/openapi.yaml
+      - ./docs:/docs
     networks:
       - laravel-network
 

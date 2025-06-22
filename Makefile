@@ -17,3 +17,6 @@ logs:
 
 ps:
 	docker compose ps
+
+gen-swagger:
+	./vendor/bin/openapi app/ -o ./docs/openapi.yaml
