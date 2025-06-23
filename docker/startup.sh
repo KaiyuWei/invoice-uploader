@@ -21,10 +21,11 @@ if grep -q "^APP_KEY=$" /var/www/html/.env; then
     php artisan key:generate
 fi
 
-# Run migrations
+echo "Installing Composer dependencies..."
+composer install --optimize-autoloader --no-interaction
+
 echo "Running database migrations..."
 php artisan migrate --force
 
-# Start Apache
 echo "Starting Apache..."
 apache2-foreground 
