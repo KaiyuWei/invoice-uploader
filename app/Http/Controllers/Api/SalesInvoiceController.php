@@ -147,7 +147,7 @@ class SalesInvoiceController extends Controller
         try {
             $validated = $request->validated();
 
-            $result = $this->invoiceService->createInvoice($validated);
+            $result = $this->invoiceService->createInvoiceAndSendToExactOnline($validated);
 
             if ($result['isSentToExactOnline']) {
                 $status = 'success';

@@ -69,11 +69,6 @@ class InvoiceServiceTest extends TestCase
         $mockInvoice->invoiceDate = $validatedData['invoiceDate'];
         $mockInvoice->totalAmount = $validatedData['totalAmount'];
 
-        $mockInvoice->shouldReceive('load')
-        ->once()
-        ->with('invoiceLines')
-        ->andReturnSelf();
-
         $this->mockSalesInvoiceFactory
             ->shouldReceive('create')
             ->once()
@@ -99,7 +94,7 @@ class InvoiceServiceTest extends TestCase
                 return $callback();
             });
 
-        $result = $this->invoiceService->createInvoice($validatedData);
+        $result = $this->invoiceService->createInvoiceAndSendToExactOnline($validatedData);
 
         $this->assertInstanceOf(SalesInvoice::class, $result['invoice']);
         $this->assertEquals('Test Company', $result['invoice']->customerName);
@@ -141,11 +136,6 @@ class InvoiceServiceTest extends TestCase
         $mockInvoice->invoiceDate = $validatedData['invoiceDate'];
         $mockInvoice->totalAmount = $validatedData['totalAmount'];
 
-        $mockInvoice->shouldReceive('load')
-        ->once()
-        ->with('invoiceLines')
-        ->andReturnSelf();
-
         $this->mockSalesInvoiceFactory
             ->shouldReceive('create')
             ->once()
@@ -174,7 +164,7 @@ class InvoiceServiceTest extends TestCase
                 return $callback();
             });
 
-        $result = $this->invoiceService->createInvoice($validatedData);
+        $result = $this->invoiceService->createInvoiceAndSendToExactOnline($validatedData);
 
         $this->assertInstanceOf(SalesInvoice::class, $result['invoice']);
         $this->assertEquals('Test Company', $result['invoice']->customerName);
@@ -195,7 +185,7 @@ class InvoiceServiceTest extends TestCase
             'invoiceLines' => []
         ];
 
-        $this->invoiceService->createInvoice($validatedData);
+        $this->invoiceService->createInvoiceAndSendToExactOnline($validatedData);
     }
 
     public function test_throws_exception_for_missing_invoice_lines(): void
@@ -209,6 +199,6 @@ class InvoiceServiceTest extends TestCase
             'totalAmount' => 1500.00
         ];
 
-        $this->invoiceService->createInvoice($validatedData);
+        $this->invoiceService->createInvoiceAndSendToExactOnline($validatedData);
     }
 }

@@ -25,24 +25,14 @@ class InvoiceService
      * @return array
      * @throws \Exception
      */
-    public function createInvoice(array $validatedData): array
+    public function createInvoiceAndSendToExactOnline(array $validatedData): array
     {
         // a invoice without any line items is invalid
         if (empty($validatedData['invoiceLines'])) {
             throw new \InvalidArgumentException('Invoice lines cannot be empty. An invoice must have at least one line item.');
         }
 
-        $invoice = DB::transaction(function () use ($validatedData) {
-            $invoice = $this->salesInvoiceFactory->create([
-                'customer_name' => $validatedData['customerName'],
-                'invoice_date' => $validatedData['invoiceDate'],
-                'total_amount' => $validatedData['totalAmount'],
-            ]);
-
-            $this->invoiceLineService->createInvoiceLines($invoice, $validatedData['invoiceLines']);
-
-            return $invoice;
-        });
+        $invoice = $this->createInvoiceWithLines($validatedData);
 
         Log::info('Sales invoice created with ' . count($validatedData['invoiceLines']) . ' lines', [
             'invoice_id' => $invoice->id,
@@ -80,7 +70,24 @@ class InvoiceService
 
         return [
             'isSentToExactOnline' => $reqeustResult,
-            'invoice' => $invoice->load('invoiceLines')
+            'invoice' => $invoice
         ];
+    }
+
+    public function createInvoiceWithLines(array $validatedData): SalesInvoice
+    {
+        $invoice = DB::transaction(function () use ($validatedData) {
+            $invoice = $this->salesInvoiceFactory->create([
+                'customer_name' => $validatedData['customerName'],
+                'invoice_date' => $validatedData['invoiceDate'],
+                'total_amount' => $validatedData['totalAmount'],
+            ]);
+
+            $this->invoiceLineService->createInvoiceLines($invoice, $validatedData['invoiceLines']);
+
+            return $invoice;
+        });
+
+        return $invoice;
     }
 }
