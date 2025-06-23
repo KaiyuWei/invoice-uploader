@@ -89,4 +89,107 @@ class SalesInvoiceUploadTest extends TestCase
                 'invoiceLines'
             ]);
     }
+
+    public function test_missing_customer_name_returns_validation_error(): void
+    {
+        $payload = [
+            'invoiceDate' => '2024-01-15',
+            'totalAmount' => 1500.00,
+            'invoiceLines' => [
+                [
+                    'description' => 'Web Development Services',
+                    'quantity' => 10.0,
+                    'unitPrice' => 100.00,
+                    'amount' => 1000.00
+                ],
+                [
+                    'description' => 'Consulting Services',
+                    'quantity' => 5.0,
+                    'unitPrice' => 100.00,
+                    'amount' => 500.00
+                ]
+            ]
+        ];
+
+        $response = $this->postJson('/api/sales-invoices', $payload);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'customerName'
+            ]);
+    }
+
+    public function test_missing_invoice_date_returns_validation_error(): void
+    {
+        $payload = [
+            'customerName' => 'Test Customer Integration',
+            'totalAmount' => 1500.00,
+            'invoiceLines' => [
+                [
+                    'description' => 'Web Development Services',
+                    'quantity' => 10.0,
+                    'unitPrice' => 100.00,
+                    'amount' => 1000.00
+                ],
+                [
+                    'description' => 'Consulting Services',
+                    'quantity' => 5.0,
+                    'unitPrice' => 100.00,
+                    'amount' => 500.00
+                ]
+            ]
+        ];
+
+        $response = $this->postJson('/api/sales-invoices', $payload);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'invoiceDate'
+            ]);
+    }
+
+    public function test_missing_total_amount_returns_validation_error(): void
+    {
+        $payload = [
+            'customerName' => 'Test Customer Integration',
+            'invoiceDate' => '2024-01-15',
+            'invoiceLines' => [
+                [
+                    'description' => 'Web Development Services',
+                    'quantity' => 10.0,
+                    'unitPrice' => 100.00,
+                    'amount' => 1000.00
+                ],
+                [
+                    'description' => 'Consulting Services',
+                    'quantity' => 5.0,
+                    'unitPrice' => 100.00,
+                    'amount' => 500.00
+                ]
+            ]
+        ];
+
+        $response = $this->postJson('/api/sales-invoices', $payload);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'totalAmount'
+            ]);
+    }
+
+    public function test_missing_invoice_lines_returns_validation_error(): void
+    {
+        $payload = [
+            'customerName' => 'Test Customer Integration',
+            'invoiceDate' => '2024-01-15',
+            'totalAmount' => 1500.00,
+        ];
+
+        $response = $this->postJson('/api/sales-invoices', $payload);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'invoiceLines'
+            ]);
+    }
 }

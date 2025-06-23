@@ -36,7 +36,7 @@ class InvoiceServiceTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_create_invoice_successfully()
+    public function test_create_invoice_and_send_to_exactonline_successful()
     {
         $validatedData = [
             'customerName' => 'Test Company',
@@ -108,7 +108,7 @@ class InvoiceServiceTest extends TestCase
         $this->assertTrue($result['isSentToExactOnline']);
     }
 
-    public function test_create_invoice_fails()
+    public function test_sending_invoice_to_exactonline_fails()
     {
         $validatedData = [
             'customerName' => 'Test Company',
