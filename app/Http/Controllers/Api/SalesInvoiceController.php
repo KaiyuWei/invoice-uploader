@@ -106,6 +106,31 @@ class SalesInvoiceController extends Controller
      *                 property="message",
      *                 type="string",
      *                 example="Invoice uploaded successfully, and has been sent to ExactOnline"
+     *             ),
+     *             @OA\Property(
+     *                 property="invoice",
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="customer_name", type="string", example="Test Customer Integration"),
+     *                 @OA\Property(property="invoice_date", type="string", format="date", example="2024-01-15"),
+     *                 @OA\Property(property="total_amount", type="number", format="float", example=1500.00),
+     *                 @OA\Property(property="created_at", type="string", format="date-time"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time"),
+     *                 @OA\Property(
+     *                     property="invoice_lines",
+     *                     type="array",
+     *                     @OA\Items(
+     *                         type="object",
+     *                         @OA\Property(property="id", type="integer", example=1),
+     *                         @OA\Property(property="sales_invoice_id", type="integer", example=1),
+     *                         @OA\Property(property="description", type="string", example="Web Development Services"),
+     *                         @OA\Property(property="quantity", type="number", format="float", example=10.0),
+     *                         @OA\Property(property="unit_price", type="number", format="float", example=100.00),
+     *                         @OA\Property(property="amount", type="number", format="float", example=1000.00),
+     *                         @OA\Property(property="created_at", type="string", format="date-time"),
+     *                         @OA\Property(property="updated_at", type="string", format="date-time")
+     *                     )
+     *                 )
      *             )
      *         )
      *     ),
@@ -160,6 +185,7 @@ class SalesInvoiceController extends Controller
             return response()->json([
                 'status' => $status,
                 'message' => $message,
+                'invoice' => $result['invoice'],
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
