@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Log;
 use Mockery;
 use Mockery\MockInterface;
 use Tests\TestCase;
+use Illuminate\Database\Eloquent\Collection;
+use App\Models\InvoiceLine;
 
 class InvoiceServiceTest extends TestCase
 {
@@ -77,7 +79,8 @@ class InvoiceServiceTest extends TestCase
         $this->mockInvoiceLineService
             ->shouldReceive('createInvoiceLines')
             ->once()
-            ->with($mockInvoice, $validatedData['invoiceLines']);
+            ->with($mockInvoice, $validatedData['invoiceLines'])
+            ->andReturn(Mockery::mock(Collection::class));
         $this->mockExactOnlineService
             ->shouldReceive('sendInvoice')
             ->once()
@@ -144,7 +147,8 @@ class InvoiceServiceTest extends TestCase
         $this->mockInvoiceLineService
             ->shouldReceive('createInvoiceLines')
             ->once()
-            ->with($mockInvoice, $validatedData['invoiceLines']);
+            ->with($mockInvoice, $validatedData['invoiceLines'])
+            ->andReturn(Mockery::mock(Collection::class));
         $this->mockExactOnlineService
             ->shouldReceive('sendInvoice')
             ->once()
@@ -173,6 +177,69 @@ class InvoiceServiceTest extends TestCase
         $this->assertFalse($result['isSentToExactOnline']);
     }
 
+    public function test_create_invoice_successful()
+    {
+        $line1 = [
+            'description' => 'Web Development',
+            'quantity' => 10.0,
+            'unitPrice' => 100.00,
+            'amount' => 1000.00,
+        ];
+        $line2 = [
+            'description' => 'Design Services',
+            'quantity' => 5.0,
+            'unitPrice' => 100.00,
+            'amount' => 500.00,
+        ];
+        $validatedData = [
+            'customerName' => 'Test Company',
+            'invoiceDate' => '2024-01-15',
+            'totalAmount' => 1500.00,
+            'invoiceLines' => [$line1, $line2],
+        ];
+        $invoiceAttributes = [
+            'customer_name' => $validatedData['customerName'],
+            'invoice_date' => $validatedData['invoiceDate'],
+            'total_amount' => $validatedData['totalAmount'],
+        ];
+
+        $mockInvoice = Mockery::mock(SalesInvoice::class)->makePartial();
+        $mockInvoice->customerName = $validatedData['customerName'];
+        $mockInvoice->invoiceDate = $validatedData['invoiceDate'];
+        $mockInvoice->totalAmount = $validatedData['totalAmount'];
+
+        $mockInvoiceLines = new Collection();
+        $mockInvoiceLines->push(new InvoiceLine(['description' => $line1['description'], 'quantity' => $line1['quantity'], 'unit_price' => $line1['unitPrice'], 'amount' => $line1['amount']]));
+        $mockInvoiceLines->push(new InvoiceLine(['description' => $line2['description'], 'quantity' => $line2['quantity'], 'unit_price' => $line2['unitPrice'], 'amount' => $line2['amount']]));
+        $mockInvoice->invoiceLines = $mockInvoiceLines;
+
+        $this->mockSalesInvoiceFactory
+            ->shouldReceive('create')
+            ->once()
+            ->with($invoiceAttributes)
+            ->andReturn($mockInvoice);
+        $this->mockInvoiceLineService
+            ->shouldReceive('createInvoiceLines')
+            ->once()
+            ->with($mockInvoice, $validatedData['invoiceLines'])
+            ->andReturn(Mockery::mock(Collection::class));
+
+        DB::shouldReceive('transaction')
+            ->once()
+            ->with(Mockery::type('Closure'))
+            ->andReturnUsing(function ($callback) {
+                return $callback();
+            });
+
+        $result = $this->invoiceService->createInvoiceWithLines($validatedData);
+
+        $this->assertInstanceOf(SalesInvoice::class, $result);
+        $this->assertEquals('Test Company', $result->customerName);
+        $this->assertEquals('2024-01-15', $result->invoiceDate);
+        $this->assertEquals(1500.00, $result->totalAmount);
+        $this->assertCount(2, $result->invoiceLines);
+    }
+
     public function test_throws_exception_for_empty_invoice_lines(): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -185,7 +252,7 @@ class InvoiceServiceTest extends TestCase
             'invoiceLines' => []
         ];
 
-        $this->invoiceService->createInvoiceAndSendToExactOnline($validatedData);
+        $this->invoiceService->createInvoiceWithLines($validatedData);
     }
 
     public function test_throws_exception_for_missing_invoice_lines(): void
@@ -199,6 +266,6 @@ class InvoiceServiceTest extends TestCase
             'totalAmount' => 1500.00
         ];
 
-        $this->invoiceService->createInvoiceAndSendToExactOnline($validatedData);
+        $this->invoiceService->createInvoiceWithLines($validatedData);
     }
 }
