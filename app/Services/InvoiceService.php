@@ -25,7 +25,7 @@ class InvoiceService
      */
     public function createInvoice(array $validatedData): SalesInvoice
     {
-        return DB::transaction(function () use ($validatedData) {
+        $invoice = DB::transaction(function () use ($validatedData) {
             $invoice = $this->salesInvoiceFactory->create([
                 'customer_name' => $validatedData['customerName'],
                 'invoice_date' => $validatedData['invoiceDate'],
@@ -40,7 +40,9 @@ class InvoiceService
                 'total_amount' => $invoice->totalAmount
             ]);
 
-            return $invoice->load('invoiceLines');
+            return $invoice;
         });
+
+        return $invoice->load('invoiceLines');
     }
 }

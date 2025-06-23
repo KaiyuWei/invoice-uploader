@@ -23,6 +23,7 @@ class InvoiceServiceTest extends TestCase
         parent::setUp();
 
         $this->mockInvoiceLineService = Mockery::mock(InvoiceLineServiceInterface::class);
+        $this->mockSalesInvoiceFactory = Mockery::mock(SalesInvoiceFactoryInterface::class);
         $this->invoiceService = new InvoiceService($this->mockInvoiceLineService, $this->mockSalesInvoiceFactory);
     }
 
@@ -60,19 +61,21 @@ class InvoiceServiceTest extends TestCase
             'total_amount' => $validatedData['totalAmount'],
         ];
 
-        $mockInvoice = Mockery::mock('alias:' . SalesInvoice::class);
+        $mockInvoice = Mockery::mock(SalesInvoice::class)->makePartial();
+        $mockInvoice->customerName = $validatedData['customerName'];
+        $mockInvoice->invoiceDate = $validatedData['invoiceDate'];
+        $mockInvoice->totalAmount = $validatedData['totalAmount'];
 
-        $fakeInvoice = new SalesInvoice($invoiceAttributes);
-        $fakeInvoice = Mockery::mock($fakeInvoice);
-        $fakeInvoice->shouldReceive('load')
+        $mockInvoice->shouldReceive('load')
         ->once()
         ->with('invoiceLines')
         ->andReturnSelf();
 
-        $mockInvoice->shouldReceive('create')
-        ->once()
-        ->with($invoiceAttributes)
-        ->andReturn($fakeInvoice);
+        $this->mockSalesInvoiceFactory
+            ->shouldReceive('create')
+            ->once()
+            ->with($invoiceAttributes)
+            ->andReturn($mockInvoice);
 
         $this->mockInvoiceLineService
             ->shouldReceive('createInvoiceLines')
