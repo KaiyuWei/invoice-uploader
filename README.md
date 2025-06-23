@@ -141,12 +141,16 @@ The application includes comprehensive testing:
 After the 3 containers are up:
 1. Run all the test cases, including unit test and feature test cases: `make test`
 2. The swagger UI is available in http://localhost:8080/. You can see complete api documentation, and test the api there.
+3. Access the MySQL database shell by running `make db`.
+4. Log file is in `storage/logs/laravel.log`.
 
-## 🔧 Simplified modules
-There are some modules that usually should be part of the codebase. But for time being, they are just ignored or simplified. Here are some of them that I would like to improve if more time is available.
+## 🔧 Simplified modules and dev env
+There are some modules that usually should be part of the codebase. But for time being, they are just ignored or simplified. Also, some configurations are only for dev env. Here are some of them that I would like to improve if more time is available.
 
 ### 🔐 Authentication
-Apparently  you don't want everyone to be able to use the api and inject data to the database, so an authentication is needed. The simplest way is bearer token authentication. For one user session, a token is generated and it should be included in the header of the request. Based on the token, and probably the roles of users, we can also assign different access to different users.
+Apparently you don't want everyone to be able to use the api and inject data to the database, so an authentication is needed. The simplest way is bearer token authentication. For one user session, a token is generated and it should be included in the header of the request. Based on the token, and probably the roles of users, we can also assign different access to different users.
+
+In the Api documentation, I still kept the 401 response, because in production, this can really happen, though it is never the case in this project.
 
 ### 🌐 Api client
 There is a ExternalApiFakeClientInterface. This interface and its implementations are fake clients used for simulating external API calls. They provide a consistent interface for testing API integrations without making actual HTTP requests.
@@ -156,11 +160,14 @@ There is a ExternalApiFakeClientInterface. This interface and its implementation
  - Use SDKs provided by the external API vendor
  - Implement real HTTP clients with proper authentication, retry logic, etc.
 
+### ㊙️ Credential management
+Credentials are kept in .env file or docker-compose file because they are only for local or dev environment. In production, they are kept in Secret node (k8s cluster), or some local files, or set as env variable on server (monolith).
+
 ### 🔄 Handling the failure of sending to ExactOnline
 
 Sending invoice data to ExactOnline can fail. There are different ways to handle it, depending on the purpose of sending the data:
 
-1. Retry the send invoice operation in limited times, say at most 3 times. If it still fails, we should send an email to the user with the invoice details. This method can be used when we want to use the ExactOnline cloud service to send the invoice data with our customer.
+1. Retry the send invoice operation in limited times, say at most 3 times. If it still fails, we should email the user with the invoice details. This method can be used when we want to use the ExactOnline cloud service to send the invoice data with our customer.
 
 2. Retry the send invoice operation in limited times. If it still fails, we should roll back the invoice data stored in the app database;
 

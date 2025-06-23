@@ -11,6 +11,9 @@ build-up:
 down:
 	docker compose down
 
+db:
+	mysql -h 127.0.0.1 -u laravel_user -P 3306 -puser_password laravel
+
 gen-swagger:
 	./vendor/bin/openapi app/ -o ./docs/openapi.yaml
 
