@@ -132,14 +132,14 @@ The application includes comprehensive testing:
 
 ## 🚀 How to run the service
 1. Clone the repository
-2. Run `docker-compose up` in the **root folder of the repository**. There will be 3 docker containers up:
+2. Run `make up` in the **root folder of the repository**. There will be 3 docker containers up:
     - The api server named `laravel-app`
     - The database container named `laravel-db`
     - The swagger UI container named `swagger-ui`
 
 ## 🧪 How to test
 After the 3 containers are up:
-1. Run all the test cases, including unit test and feature test cases: `docker exec -it laravel-app sh -c "cd /var/www/html && php artisan test"`
+1. Run all the test cases, including unit test and feature test cases: `make test`
 2. The swagger UI is available in http://localhost:8080/. You can see complete api documentation, and test the api there.
 
 ## 🔧 Simplified modules

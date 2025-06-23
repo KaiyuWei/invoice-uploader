@@ -11,17 +11,11 @@ build-up:
 down:
 	docker compose down
 
-build:
-	docker compose build
-
-logs:
-	docker compose logs -f
-
-ps:
-	docker compose ps
-
 gen-swagger:
 	./vendor/bin/openapi app/ -o ./docs/openapi.yaml
 
 fix:
 	$(PHP_CS_FIXER) fix $(file)
+
+test:
+	docker-compose exec app sh -c "cd /var/www/html && php artisan test"
