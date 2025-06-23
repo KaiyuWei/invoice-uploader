@@ -22,7 +22,7 @@ class ExactOnlineService implements ExactOnlineServiceInterface
         $payload = $this->buildExactOnlinePayload($invoice);
 
         Log::info('Forwarding invoice to ExactOnline.', [
-            // @todo: need UUID here. Should add a migration file to add the uuid column to the database
+            // better to generate and send a uuid to the api. The uuid of invoice should also be stored in the database.
             'invoice_id' => $invoice->id,
             'payload' => $payload
         ]);
