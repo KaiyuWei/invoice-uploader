@@ -96,37 +96,33 @@ class SalesInvoiceController extends Controller
      *         description="Invoice created successfully",
      *         @OA\JsonContent(
      *             @OA\Property(
-     *                 property="message",
+     *                 property="status",
      *                 type="string",
-     *                 example="Invoice uploaded successfully"
+     *                 enum={"success", "incomplete"},
+     *                 example="success",
+     *                 description="Result of sending invoice to ExactOnline. If it is sent successfully, the status is 'success'. Otherwise, the status is 'incomplete'."
      *             ),
      *             @OA\Property(
-     *                 property="invoice",
-     *                 type="object",
-     *                 @OA\Property(property="id", type="integer", example=1),
-     *                 @OA\Property(property="customerName", type="string", example="John Doe Company"),
-     *                 @OA\Property(property="invoiceDate", type="string", format="date", example="2024-01-15"),
-     *                 @OA\Property(property="totalAmount", type="number", format="float", example=1500.00),
-     *                 @OA\Property(property="created_at", type="string", format="date-time"),
-     *                 @OA\Property(property="updated_at", type="string", format="date-time"),
-     *                 @OA\Property(
-     *                     property="invoice_lines",
-     *                     type="array",
-     *                     @OA\Items(
-     *                         type="object",
-     *                         @OA\Property(property="id", type="integer", example=1),
-     *                         @OA\Property(property="description", type="string", example="Web Development Services"),
-     *                         @OA\Property(property="quantity", type="number", format="float", example=10.0),
-     *                         @OA\Property(property="unitPrice", type="number", format="float", example=100.00),
-     *                         @OA\Property(property="amount", type="number", format="float", example=1000.00)
-     *                     )
-     *                 )
+     *                 property="message",
+     *                 type="string",
+     *                 example="Invoice uploaded successfully, and has been sent to ExactOnline"
+     *             )
+     *         )
+     *     ),
+     *      @OA\Response(
+     *         response=401,
+     *         description="Authentication error.",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="Need authentication to access this endpoint"
      *             )
      *         )
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Validation error",
+     *         description="Validation error.",
      *         @OA\JsonContent(
      *             @OA\Property(
      *                 property="message",
