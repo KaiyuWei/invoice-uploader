@@ -21,31 +21,31 @@ paths:
           application/json:
             schema:
               required:
-                - customerName
-                - invoiceDate
-                - totalAmount
-                - invoiceLines
+                - customer_name
+                - invoice_date
+                - total_amount
+                - invoice_lines
               properties:
-                customerName:
+                customer_name:
                   description: 'Name of the customer'
                   type: string
                   maxLength: 255
                   example: 'Kaiyu Company'
-                invoiceDate:
+                invoice_date:
                   description: 'Date of the invoice'
                   type: string
                   format: date
                   example: '2024-01-15'
-                totalAmount:
+                total_amount:
                   description: 'Total amount of the invoice'
                   type: number
                   format: float
                   minimum: 0
                   example: 1500
-                invoiceLines:
+                invoice_lines:
                   description: 'Array of invoice line items'
                   type: array
-                  items: { required: [description, quantity, unitPrice, amount], properties: { description: { description: 'Description of the line item', type: string, maxLength: 1000, example: 'Web Development Services' }, quantity: { description: 'Quantity of the item', type: number, format: float, minimum: 0, example: 10 }, unitPrice: { description: 'Unit price of the item', type: number, format: float, minimum: 0, example: 100 }, amount: { description: 'Total amount for this line', type: number, format: float, minimum: 0, example: 1000 } }, type: object }
+                  items: { required: [description, quantity, unit_price, amount], properties: { description: { description: 'Description of the line item', type: string, maxLength: 1000, example: 'Web Development Services' }, quantity: { description: 'Quantity of the item', type: number, format: float, minimum: 0, example: 10 }, unit_price: { description: 'Unit price of the item', type: number, format: float, minimum: 0, example: 100 }, amount: { description: 'Total amount for this line', type: number, format: float, minimum: 0, example: 1000 } }, type: object }
                   minItems: 1
               type: object
       responses:
@@ -74,7 +74,7 @@ paths:
               schema:
                 properties:
                   message: { type: string, example: 'The given data was invalid.' }
-                  errors: { properties: { customerName: { type: array, items: { type: string, example: 'Customer name is required.' } } }, type: object }
+                  errors: { properties: { customer_name: { type: array, items: { type: string, example: 'Customer name is required.' } } }, type: object }
                 type: object
 tags:
   -

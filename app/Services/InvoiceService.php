@@ -29,7 +29,7 @@ class InvoiceService
     {
         $invoice = $this->createInvoiceWithLines($validatedData);
 
-        Log::info('Sales invoice created with ' . count($validatedData['invoiceLines']) . ' lines', [
+        Log::info('Sales invoice created with ' . count($validatedData['invoice_lines']) . ' lines', [
             'invoice_id' => $invoice->id,
         ]);
 
@@ -49,18 +49,18 @@ class InvoiceService
     public function createInvoiceWithLines(array $validatedData): SalesInvoice
     {
         // a invoice without any line items is invalid
-        if (empty($validatedData['invoiceLines'])) {
+        if (empty($validatedData['invoice_lines'])) {
             throw new \InvalidArgumentException('Invoice lines cannot be empty. An invoice must have at least one line item.');
         }
 
         $invoice = DB::transaction(function () use ($validatedData) {
             $invoice = $this->salesInvoiceFactory->create([
-                'customer_name' => $validatedData['customerName'],
-                'invoice_date' => $validatedData['invoiceDate'],
-                'total_amount' => $validatedData['totalAmount'],
+                'customer_name' => $validatedData['customer_name'],
+                'invoice_date' => $validatedData['invoice_date'],
+                'total_amount' => $validatedData['total_amount'],
             ]);
 
-            $this->invoiceLineService->createInvoiceLines($invoice, $validatedData['invoiceLines']);
+            $this->invoiceLineService->createInvoiceLines($invoice, $validatedData['invoice_lines']);
 
             return $invoice;
         });

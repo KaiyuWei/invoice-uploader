@@ -31,7 +31,7 @@ class InvoiceLineServiceTest extends TestCase
         $lineData = [
             'description' => 'Consulting Services',
             'quantity' => 8.75,
-            'unitPrice' => 125.00,
+            'unit_price' => 125.00,
             'amount' => 1093.75,
         ];
 
@@ -41,7 +41,7 @@ class InvoiceLineServiceTest extends TestCase
         $mockInvoiceLine = Mockery::mock(InvoiceLine::class)->makePartial();
         $mockInvoiceLine->description = $lineData['description'];
         $mockInvoiceLine->quantity = $lineData['quantity'];
-        $mockInvoiceLine->unit_price = $lineData['unitPrice'];
+        $mockInvoiceLine->unit_price = $lineData['unit_price'];
         $mockInvoiceLine->amount = $lineData['amount'];
 
         /** @var SalesInvoice|Mockery\LegacyMockInterface $mockInvoice */
@@ -54,7 +54,7 @@ class InvoiceLineServiceTest extends TestCase
             ->with([
                 'description' => $lineData['description'],
                 'quantity' => $lineData['quantity'],
-                'unit_price' => $lineData['unitPrice'],
+                'unit_price' => $lineData['unit_price'],
                 'amount' => $lineData['amount'],
             ])
             ->andReturn($mockInvoiceLine);
@@ -64,7 +64,7 @@ class InvoiceLineServiceTest extends TestCase
         $this->assertInstanceOf(InvoiceLine::class, $result);
         $this->assertEquals($lineData['description'], $result->description);
         $this->assertEquals($lineData['quantity'], $result->quantity);
-        $this->assertEquals($lineData['unitPrice'], $result->unit_price);
+        $this->assertEquals($lineData['unit_price'], $result->unit_price);
         $this->assertEquals($lineData['amount'], $result->amount);
     }
 
@@ -73,13 +73,13 @@ class InvoiceLineServiceTest extends TestCase
         $line1 = [
             'description' => 'Web Development',
             'quantity' => 10.5,
-            'unitPrice' => 100.25,
+            'unit_price' => 100.25,
             'amount' => 1052.625,
         ];
         $line2 = [
             'description' => 'Design Services',
             'quantity' => 5.0,
-            'unitPrice' => 75.50,
+            'unit_price' => 75.50,
             'amount' => 377.50,
         ];
 

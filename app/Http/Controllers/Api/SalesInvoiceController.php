@@ -25,23 +25,23 @@ class SalesInvoiceController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"customerName", "invoiceDate", "totalAmount", "invoiceLines"},
+     *             required={"customer_name", "invoice_date", "total_amount", "invoice_lines"},
      *             @OA\Property(
-     *                 property="customerName",
+     *                 property="customer_name",
      *                 type="string",
      *                 maxLength=255,
      *                 example="Kaiyu Company",
      *                 description="Name of the customer"
      *             ),
      *             @OA\Property(
-     *                 property="invoiceDate",
+     *                 property="invoice_date",
      *                 type="string",
      *                 format="date",
      *                 example="2024-01-15",
      *                 description="Date of the invoice"
      *             ),
      *             @OA\Property(
-     *                 property="totalAmount",
+     *                 property="total_amount",
      *                 type="number",
      *                 format="float",
      *                 minimum=0,
@@ -49,12 +49,12 @@ class SalesInvoiceController extends Controller
      *                 description="Total amount of the invoice"
      *             ),
      *             @OA\Property(
-     *                 property="invoiceLines",
+     *                 property="invoice_lines",
      *                 type="array",
      *                 minItems=1,
      *                 @OA\Items(
      *                     type="object",
-     *                     required={"description", "quantity", "unitPrice", "amount"},
+     *                     required={"description", "quantity", "unit_price", "amount"},
      *                     @OA\Property(
      *                         property="description",
      *                         type="string",
@@ -71,7 +71,7 @@ class SalesInvoiceController extends Controller
      *                         description="Quantity of the item"
      *                     ),
      *                     @OA\Property(
-     *                         property="unitPrice",
+     *                         property="unit_price",
      *                         type="number",
      *                         format="float",
      *                         minimum=0,
@@ -158,7 +158,7 @@ class SalesInvoiceController extends Controller
      *                 property="errors",
      *                 type="object",
      *                 @OA\Property(
-     *                     property="customerName",
+     *                     property="customer_name",
      *                     type="array",
      *                     @OA\Items(type="string", example="Customer name is required.")
      *                 )

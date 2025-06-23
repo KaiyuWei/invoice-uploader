@@ -22,12 +22,7 @@ class InvoiceLineService implements InvoiceLineServiceInterface
 
     public function createInvoiceLine(SalesInvoice $invoice, array $lineData): InvoiceLine
     {
-        $invoiceLine = $invoice->invoiceLines()->create([
-            'description' => $lineData['description'],
-            'quantity' => $lineData['quantity'],
-            'unit_price' => $lineData['unitPrice'],
-            'amount' => $lineData['amount'],
-        ]);
+        $invoiceLine = $invoice->invoiceLines()->create($lineData);
 
         return $invoiceLine;
     }
