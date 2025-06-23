@@ -27,6 +27,11 @@ class InvoiceService
      */
     public function createInvoice(array $validatedData): array
     {
+        // a invoice without any line items is invalid
+        if (empty($validatedData['invoiceLines'])) {
+            throw new \InvalidArgumentException('Invoice lines cannot be empty. An invoice must have at least one line item.');
+        }
+
         $invoice = DB::transaction(function () use ($validatedData) {
             $invoice = $this->salesInvoiceFactory->create([
                 'customer_name' => $validatedData['customerName'],

@@ -182,4 +182,33 @@ class InvoiceServiceTest extends TestCase
         $this->assertEquals(1500.00, $result['invoice']->totalAmount);
         $this->assertFalse($result['isSentToExactOnline']);
     }
+
+    public function test_throws_exception_for_empty_invoice_lines(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invoice lines cannot be empty. An invoice must have at least one line item.');
+
+        $validatedData = [
+            'customerName' => 'Test Customer',
+            'invoiceDate' => '2024-01-15',
+            'totalAmount' => 1500.00,
+            'invoiceLines' => []
+        ];
+
+        $this->invoiceService->createInvoice($validatedData);
+    }
+
+    public function test_throws_exception_for_missing_invoice_lines(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invoice lines cannot be empty. An invoice must have at least one line item.');
+
+        $validatedData = [
+            'customerName' => 'Test Customer',
+            'invoiceDate' => '2024-01-15',
+            'totalAmount' => 1500.00
+        ];
+
+        $this->invoiceService->createInvoice($validatedData);
+    }
 }
