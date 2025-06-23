@@ -151,10 +151,19 @@ class SalesInvoiceController extends Controller
         try {
             $validated = $request->validated();
 
-            $this->invoiceService->createInvoice($validated);
+            $result = $this->invoiceService->createInvoice($validated);
+
+            if ($result['isSentToExactOnline']) {
+                $status = 'success';
+                $message = 'Invoice uploaded successfully, and has been sent to ExactOnline';
+            } else {
+                $status = 'incomplete';
+                $message = 'Invoice uploaded successfully, but failed to send to ExactOnline';
+            }
 
             return response()->json([
-                'message' => 'Invoice uploaded successfully',
+                'status' => $status,
+                'message' => $message,
             ], 201);
         } catch (\Exception $e) {
             return response()->json([

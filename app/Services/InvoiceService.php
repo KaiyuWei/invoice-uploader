@@ -22,10 +22,10 @@ class InvoiceService
      * Create a new sales invoice with line items
      *
      * @param array $validatedData
-     * @return SalesInvoice
+     * @return array
      * @throws \Exception
      */
-    public function createInvoice(array $validatedData): SalesInvoice
+    public function createInvoice(array $validatedData): array
     {
         $invoice = DB::transaction(function () use ($validatedData) {
             $invoice = $this->salesInvoiceFactory->create([
@@ -43,8 +43,8 @@ class InvoiceService
             'invoice_id' => $invoice->id,
         ]);
 
-        $result = $this->exactOnlineService->sendInvoice($invoice);
-        if (!$result) {
+        $reqeustResult = $this->exactOnlineService->sendInvoice($invoice);
+        if (!$reqeustResult) {
             /**
              * There are different ways to handle this situation:
              *
@@ -73,6 +73,9 @@ class InvoiceService
             ]);
         }
 
-        return $invoice->load('invoiceLines');
+        return [
+            'isSentToExactOnline' => $reqeustResult,
+            'invoice' => $invoice->load('invoiceLines')
+        ];
     }
 }

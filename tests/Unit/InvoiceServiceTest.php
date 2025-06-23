@@ -101,10 +101,11 @@ class InvoiceServiceTest extends TestCase
 
         $result = $this->invoiceService->createInvoice($validatedData);
 
-        $this->assertInstanceOf(SalesInvoice::class, $result);
-        $this->assertEquals('Test Company', $result->customerName);
-        $this->assertEquals('2024-01-15', $result->invoiceDate);
-        $this->assertEquals(1500.00, $result->totalAmount);
+        $this->assertInstanceOf(SalesInvoice::class, $result['invoice']);
+        $this->assertEquals('Test Company', $result['invoice']->customerName);
+        $this->assertEquals('2024-01-15', $result['invoice']->invoiceDate);
+        $this->assertEquals(1500.00, $result['invoice']->totalAmount);
+        $this->assertTrue($result['isSentToExactOnline']);
     }
 
     public function test_create_invoice_fails()
@@ -175,9 +176,10 @@ class InvoiceServiceTest extends TestCase
 
         $result = $this->invoiceService->createInvoice($validatedData);
 
-        $this->assertInstanceOf(SalesInvoice::class, $result);
-        $this->assertEquals('Test Company', $result->customerName);
-        $this->assertEquals('2024-01-15', $result->invoiceDate);
-        $this->assertEquals(1500.00, $result->totalAmount);
+        $this->assertInstanceOf(SalesInvoice::class, $result['invoice']);
+        $this->assertEquals('Test Company', $result['invoice']->customerName);
+        $this->assertEquals('2024-01-15', $result['invoice']->invoiceDate);
+        $this->assertEquals(1500.00, $result['invoice']->totalAmount);
+        $this->assertFalse($result['isSentToExactOnline']);
     }
 }
