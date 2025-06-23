@@ -33,15 +33,15 @@ class InvoiceService
             'invoice_id' => $invoice->id,
         ]);
 
-        $reqeustResult = $this->exactOnlineService->sendInvoice($invoice);
-        if (!$reqeustResult) {
+        $requestResult = $this->exactOnlineService->sendInvoice($invoice);
+        if (!$requestResult) {
             Log::error('Failed to send invoice to ExactOnline', [
                 'invoice_id' => $invoice->id,
             ]);
         }
 
         return [
-            'isSentToExactOnline' => $reqeustResult,
+            'isSentToExactOnline' => $requestResult,
             'invoice' => $invoice
         ];
     }
