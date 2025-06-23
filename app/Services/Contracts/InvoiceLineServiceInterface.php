@@ -3,6 +3,7 @@
 namespace App\Services\Contracts;
 
 use App\Models\SalesInvoice;
+use Illuminate\Database\Eloquent\Collection;
 
 interface InvoiceLineServiceInterface
 {
@@ -11,9 +12,9 @@ interface InvoiceLineServiceInterface
      *
      * @param SalesInvoice $invoice
      * @param array $invoiceLinesData
-     * @return void
+     * @return Collection
      */
-    public function createInvoiceLines(SalesInvoice $invoice, array $invoiceLinesData): void;
+    public function createInvoiceLines(SalesInvoice $invoice, array $invoiceLinesData): Collection;
 
     /**
      * Create a single invoice line item

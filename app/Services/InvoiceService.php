@@ -36,8 +36,6 @@ class InvoiceService
 
             Log::info('Sales invoice created with ' . count($validatedData['invoiceLines']) . ' lines', [
                 'invoice_id' => $invoice->id,
-                'customer_name' => $invoice->customerName,
-                'total_amount' => $invoice->totalAmount
             ]);
 
             return $invoice;

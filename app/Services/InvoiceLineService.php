@@ -5,22 +5,23 @@ namespace App\Services;
 use App\Services\Contracts\InvoiceLineServiceInterface;
 use App\Models\SalesInvoice;
 use App\Models\InvoiceLine;
+use Illuminate\Database\Eloquent\Collection;
 
 class InvoiceLineService implements InvoiceLineServiceInterface
 {
-    public function createInvoiceLines(SalesInvoice $invoice, array $invoiceLinesData): void
+    public function createInvoiceLines(SalesInvoice $invoice, array $invoiceLinesData): Collection
     {
+        $createdLines = new Collection();
+
         foreach ($invoiceLinesData as $lineData) {
-            $this->createInvoiceLine($invoice, $lineData);
+            $createdLines->push($this->createInvoiceLine($invoice, $lineData));
         }
+
+        return $createdLines;
     }
 
     public function createInvoiceLine(SalesInvoice $invoice, array $lineData): InvoiceLine
     {
-        $lineData['quantity'] = round($lineData['quantity'], 2);
-        $lineData['unit_price'] = round($lineData['unitPrice'], 2);
-        $lineData['amount'] = round($lineData['amount'], 2);
-
         $invoiceLine = $invoice->invoiceLines()->create([
             'description' => $lineData['description'],
             'quantity' => $lineData['quantity'],
