@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadInvoiceRequest;
 use App\Services\InvoiceService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 
 class SalesInvoiceController extends Controller
 {
