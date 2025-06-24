@@ -119,6 +119,7 @@ The service transforms internal data structure to ExactOnline format:
 
 The system implements a robust error handling approach:
 - **Validation Errors**: Return 422 status with detailed validation messages
+- **Authentication Errors**: Return 401 with error message
 - **Database Errors**: Rollback transactions on failure
 - **External API Errors**: Log failures and return appropriate status
 - **System Errors**: Catch exceptions and return 500 status with error details
